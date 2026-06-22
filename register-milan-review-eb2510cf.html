@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+  <title>milan.com · 知识库索引与日常查询入口</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f2f8f7;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: #1a2e2c;
+      line-height: 1.6;
+      padding: 1.5rem 1rem;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* header / hero */
+    .hero {
+      background: linear-gradient(145deg, #d9f0ec 0%, #c1e6df 100%);
+      border-radius: 2rem 2rem 1rem 1rem;
+      padding: 2.5rem 2rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 8px 20px rgba(44, 110, 105, 0.08);
+    }
+
+    .hero h1 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: #0f3d38;
+      margin-bottom: 0.6rem;
+    }
+
+    .hero .sub {
+      font-size: 1.1rem;
+      color: #1f5c55;
+      max-width: 620px;
+    }
+
+    .hero .sub a {
+      color: #0d5f56;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-weight: 500;
+    }
+
+    .hero .sub a:hover {
+      color: #063f39;
+      text-decoration-thickness: 2px;
+    }
+
+    /* 目录感布局：网格卡片 */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin: 2.2rem 0 2.8rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 1.25rem;
+      padding: 1.6rem 1.5rem 1.8rem;
+      box-shadow: 0 4px 12px rgba(50, 105, 100, 0.06);
+      border: 1px solid rgba(80, 140, 134, 0.12);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .card:hover {
+      box-shadow: 0 10px 24px rgba(44, 110, 105, 0.12);
+      transform: translateY(-3px);
+    }
+
+    .card h3 {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 500;
+      font-size: 1.2rem;
+      color: #0d5249;
+      border-bottom: 2px solid #b3ded6;
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .card h3 span {
+      background: #b3ded6;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: #1f3c38;
+      margin-bottom: 0.4rem;
+    }
+
+    .card .tag {
+      display: inline-block;
+      background: #e2f3ef;
+      padding: 0.2rem 0.7rem;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      color: #14534a;
+      margin-top: 0.5rem;
+    }
+
+    /* 说明区 / 提示区 混合区块 */
+    .info-panel {
+      background: #e7f4f1;
+      border-radius: 1.8rem;
+      padding: 1.8rem 2rem;
+      margin: 1.8rem 0 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.8rem;
+      align-items: flex-start;
+      border-left: 5px solid #319387;
+    }
+
+    .info-panel .left {
+      flex: 2 1 240px;
+    }
+
+    .info-panel .right {
+      flex: 1 1 180px;
+      background: #ffffffc9;
+      padding: 0.9rem 1.2rem;
+      border-radius: 1.2rem;
+      border: 1px solid #9ecfc5;
+      font-size: 0.9rem;
+    }
+
+    .info-panel h2 {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #0d5249;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-panel p {
+      font-size: 0.95rem;
+      color: #1f3c38;
+    }
+
+    .info-panel .right strong {
+      display: block;
+      color: #09473f;
+      margin-bottom: 0.2rem;
+    }
+
+    .info-panel .right a {
+      color: #0a6357;
+      text-decoration: underline;
+      font-weight: 500;
+    }
+
+    /* 相关信息区 —— FAQ 摘要 + 引用 */
+    .related {
+      background: #ffffff;
+      border-radius: 1.8rem;
+      padding: 1.8rem 2rem;
+      margin: 2.8rem 0 1.8rem;
+      box-shadow: 0 4px 12px rgba(44, 110, 105, 0.06);
+    }
+
+    .related h2 {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #0d5249;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .related h2::before {
+      content: "📎";
+      font-size: 1.2rem;
+    }
+
+    .faq-item {
+      display: flex;
+      gap: 0.6rem 1rem;
+      padding: 0.7rem 0;
+      border-bottom: 1px dashed #d1e8e2;
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+
+    .faq-item .q {
+      flex: 0 0 6em;
+      font-weight: 500;
+      color: #0d5f56;
+    }
+
+    .faq-item .a {
+      flex: 1;
+      color: #1f3c38;
+      font-size: 0.92rem;
+    }
+
+    .faq-item .a a {
+      color: #0b6357;
+      text-decoration: underline;
+    }
+
+    /* 附加引用 / 延伸阅读 */
+    .extras {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 2rem;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 2px solid #cde5e0;
+    }
+
+    .extras span {
+      background: #e6f2ef;
+      padding: 0.2rem 0.9rem;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      color: #09473f;
+    }
+
+    .extras a {
+      color: #0b6357;
+      text-decoration: underline;
+      font-weight: 400;
+    }
+
+    /* 页脚 */
+    .footer {
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #387a71;
+      border-top: 1px solid #cfe5e0;
+      padding-top: 1.8rem;
+    }
+
+    .footer a {
+      color: #0b6357;
+      text-decoration: underline;
+    }
+
+    /* 移动端微调 */
+    @media (max-width: 600px) {
+      body {
+        padding: 0.8rem;
+      }
+
+      .hero {
+        padding: 1.8rem 1.2rem;
+        border-radius: 1.5rem;
+      }
+
+      .info-panel {
+        flex-direction: column;
+        padding: 1.4rem;
+      }
+
+      .info-panel .right {
+        width: 100%;
+      }
+
+      .related {
+        padding: 1.4rem;
+      }
+
+      .faq-item {
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+
+      .faq-item .q {
+        flex: unset;
+        font-weight: 600;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- hero 介绍区 -->
+  <header class="hero">
+    <h1>📋 日常查询 · 对照 · 延伸阅读</h1>
+    <div class="sub">
+      从零散信息到结构化索引，<a href="https://register-milan.com">milan.com</a> 提供轻量的知识库入口。
+      无论你是初次了解，还是需要快速对照参考，这里都能找到合适的起点。
+    </div>
+  </header>
+
+  <!-- 目录感布局：网格卡片 —— 特点 + 场景 -->
+  <div class="grid">
+    <div class="card">
+      <h3><span></span> 对照查阅</h3>
+      <p>将常见概念、参数或选项并排陈列，减少来回跳转。适合比较不同版本、功能或数值范围。</p>
+      <span class="tag">并列视图</span>
+    </div>
+    <div class="card">
+      <h3><span></span> 延伸索引</h3>
+      <p>每个条目附带关联链接，沿一条线索持续深挖。从基础定义到上下游信息，逐步展开。</p>
+      <span class="tag">链式参考</span>
+    </div>
+    <div class="card">
+      <h3><span></span> 快照摘要</h3>
+      <p>针对长篇幅内容提取关键段落，保留原文语境。适合快速回顾或预习核心论点。</p>
+      <span class="tag">摘要卡片</span>
+    </div>
+    <div class="card">
+      <h3><span></span> 场景过滤</h3>
+      <p>根据使用场景（入门、排查、进阶）筛选内容层级，避免信息过载。</p>
+      <span class="tag">动态分类</span>
+    </div>
+  </div>
+
+  <!-- 说明区 + 提示区 组合 -->
+  <div class="info-panel">
+    <div class="left">
+      <h2>🔍 说明 · 对照基准</h2>
+      <p>本索引页汇总常见查询方向，内容来源于公开资料与社区整理。每条信息均标注参考来源或关联链接，方便你自行核实与扩展。</p>
+      <p style="margin-top: 0.6rem;">对照时请留意版本时间与上下文，具体细节建议直接查阅原始资料或通过 <a href="https://register-milan.com">milan.com</a> 获取最新信息。</p>
+    </div>
+    <div class="right">
+      <strong>💡 使用提示</strong>
+      <p>优先使用关键词搜索而非逐页浏览；对比类信息请留意基准线；延伸阅读时注意引用日期。</p>
+      <p style="margin-top: 0.4rem;">🔗 常用入口：<a href="https://register-milan.com">milan.com</a></p>
+    </div>
+  </div>
+
+  <!-- 相关信息区：FAQ 摘要 + 延伸阅读 -->
+  <div class="related">
+    <h2>相关信息 · FAQ 摘要</h2>
+
+    <div class="faq-item">
+      <div class="q">如何开始对照？</div>
+      <div class="a">从网格卡片中选择最接近你需求的类别，点击关联条目逐步深入。你也可以直接使用 <a href="https://register-milan.com">milan.com</a> 的搜索功能定位具体内容。</div>
+    </div>
+    <div class="faq-item">
+      <div class="q">信息更新频率？</div>
+      <div class="a">核心条目随上游变动定期复核，次要参考按月刷新。部分时效性较强的内容会标注“最近更新”标签。</div>
+    </div>
+    <div class="faq-item">
+      <div class="q">延伸阅读怎么用？</div>
+      <div class="a">每个卡片和说明区下方都配有延伸链接，点击即可跳转至更详细的专题页或外部参考。所有外部链接均经过基础可用性检查。</div>
+    </div>
+
+    <!-- 延伸阅读 / 标签云风格 -->
+    <div class="extras">
+      <span>📌 对照清单</span>
+      <span>📌 术语索引</span>
+      <span>📌 版本历史</span>
+      <span>📌 常见误区</span>
+      <span><a href="https://register-milan.com">milan.com</a> · 知识库入口</span>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <p>基于公开信息整理 · 日常查询与延伸阅读 · 内容仅供参考</p>
+    <p style="margin-top: 0.3rem;">主站：<a href="https://register-milan.com">milan.com</a> · 索引页持续演化</p>
+  </footer>
+
+</div>
+</body>
+</html>
